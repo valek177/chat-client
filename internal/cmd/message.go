@@ -9,8 +9,8 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/valek177/auth/grpc/pkg/auth_v1"
-	"github.com/valek177/chat-client/client/internal/client"
-	"github.com/valek177/chat-server/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/internal/client"
 )
 
 var sendMessageCmd = &cobra.Command{
@@ -81,7 +81,7 @@ func init() {
 	}
 }
 
-func sendMessage(ctx context.Context, client chat_v1.ChatV1Client, from string, chatID int64, message string) error {
+func sendMessage(ctx context.Context, c chat_v1.ChatV1Client, from string, chatID int64, message string) error {
 	// for {
 	// Ниже пример того, как можно считывать сообщения из консоли
 	// в демонстрационных целях будем засылать в чат рандомный текст раз в 5 секунд
@@ -106,7 +106,7 @@ func sendMessage(ctx context.Context, client chat_v1.ChatV1Client, from string, 
 	// }
 	// text := gofakeit.Word()
 
-	_, err := client.SendMessage(ctx, &chat_v1.SendMessageRequest{
+	_, err := c.SendMessage(ctx, &chat_v1.SendMessageRequest{
 		ChatId: chatID,
 		Message: &chat_v1.Message{
 			From:      from,

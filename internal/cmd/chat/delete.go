@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/valek177/chat-server/client/internal/client"
+	"github.com/valek177/chat-client/internal/client"
 )
 
 var DeleteChatCmd = &cobra.Command{

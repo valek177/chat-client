@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/valek177/auth/grpc/pkg/auth_v1"
-	"github.com/valek177/chat-server/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
 )
 
 const (

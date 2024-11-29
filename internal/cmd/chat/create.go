@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/valek177/chat-client/client/internal/client"
-	"github.com/valek177/chat-server/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/internal/client"
 )
 
 var CreateChatCmd = &cobra.Command{

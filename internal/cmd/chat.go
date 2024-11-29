@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/valek177/chat-client/client/internal/cmd/chat"
+	"github.com/valek177/chat-client/internal/cmd/chat"
 )
 
 var chatCmd = &cobra.Command{

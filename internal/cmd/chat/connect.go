@@ -10,8 +10,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/valek177/chat-client/client/internal/client"
 	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
+	"github.com/valek177/chat-client/internal/client"
 )
 
 var ConnectChatCmd = &cobra.Command{
@@ -64,8 +64,8 @@ func init() {
 	}
 }
 
-func connectChat(ctx context.Context, client chat_v1.ChatV1Client, chatID int64, username string, period time.Duration) error {
-	stream, err := client.ConnectChat(ctx, &chat_v1.ConnectChatRequest{
+func connectChat(ctx context.Context, c chat_v1.ChatV1Client, chatID int64, username string, period time.Duration) error {
+	stream, err := c.ConnectChat(ctx, &chat_v1.ConnectChatRequest{
 		ChatId:   chatID,
 		Username: username,
 	})
