@@ -21,6 +21,8 @@ github.com/valek177/auth v0.0.0-20241127170640-8354aaa95d85 h1:V0Wp2yo5DWArnGTWK
 github.com/valek177/auth v0.0.0-20241127170640-8354aaa95d85/go.mod h1:oX+ZjIAtmHoChEIiCWCjcnA2OPy0Q46ZX+IFs4OCcrI=
 github.com/valek177/chat-server v0.0.0-20241127161913-01203e61ce4b h1:9mmSfM3Nhfaj4ntwWBK6ZX6bSy0nYsRNI8i13q9k1cU=
 github.com/valek177/chat-server v0.0.0-20241127161913-01203e61ce4b/go.mod h1:bVXiheyIJpvY9hqeJwOoyq0pSJ6vI0wixqZGmlef63I=
+github.com/valek177/platform-common v0.0.0-20241126095111-9a2008f6c5b1 h1:XG/OpoKw52pNZFtl/NB/44ZI6fLLsWarMYG9qMuNjF4=
+github.com/valek177/platform-common v0.0.0-20241126095111-9a2008f6c5b1/go.mod h1:Wdeb4Po5PXA9Dd4jgpbKJh9oSrN807oMfBPDg6N6xqQ=
 golang.org/x/net v0.29.0 h1:5ORfpBpCs4HzDYoodCDBbwHzdR5UrLBZ3sOnUJmFoHo=
 golang.org/x/net v0.29.0/go.mod h1:gLkgy8jTGERgjzMic6DS9+SP0ajcu6Xu3Orq/SpETg0=
 golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

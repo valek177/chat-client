@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 
+	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
 	"github.com/valek177/chat-client/internal/config"
 )
 
@@ -60,10 +61,12 @@ func (a *App) initServiceProvider(_ context.Context) error {
 	return nil
 }
 
-func ConnectChat(ctx context.Context, chatID int64) error {
+func ConnectChat(ctx context.Context, chatname, username string) (chat_v1.ChatV1_ConnectChatClient,
+	error,
+) {
 	srv, err := app.serviceProvider.CommandService(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return srv.ConnectChat(ctx, chatID)
+	return srv.ConnectChat(ctx, chatname, username)
 }

@@ -13,6 +13,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valek177/auth v0.0.0-20241127170640-8354aaa95d85 // indirect
 	github.com/valek177/chat-server v0.0.0-20241127161913-01203e61ce4b // indirect
+	github.com/valek177/platform-common v0.0.0-20241126095111-9a2008f6c5b1 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.19.0 // indirect

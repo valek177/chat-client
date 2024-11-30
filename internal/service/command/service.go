@@ -1,4 +1,4 @@
-package cmd
+package chat
 
 import "github.com/valek177/chat-client/internal/service"
 

@@ -8,14 +8,13 @@ import (
 	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
 )
 
-// AuthClient is interface for auth client
 type ChatClient interface {
 	ConnectChat(ctx context.Context, chatname, username string) (
 		chat_v1.ChatV1_ConnectChatClient, error)
 	CreateChat(ctx context.Context, chatname string, userIDs []int64) (int64, error)
 	DeleteChat(ctx context.Context, chatID int64) error
 	// Disconnect?
-	SendMessage() // TODO
+	// SendMessage() // TODO
 }
 
 type chatClient struct {
