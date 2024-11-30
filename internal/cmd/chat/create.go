@@ -7,20 +7,13 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
-	"github.com/valek177/chat-client/internal/client"
 )
 
 var CreateChatCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create chat",
 	Run: func(cmd *cobra.Command, args []string) {
-		c, err := client.NewChatV1Client()
-		if err != nil {
-			log.Fatalf("unable to create client for connect")
-		}
-		defer c.Close()
-
-		chatID, err := createChat(cmd.Context(), c.C)
+		chatID, err := app.CreateChat(cmd.Context())
 		if err != nil {
 			log.Fatalf("failed to connect chat: %v", err)
 		}

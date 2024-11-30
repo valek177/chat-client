@@ -17,7 +17,7 @@ func NewService(authClient AuthClient) service.AuthService {
 	}
 }
 
-func (s *serv) GetAccessToken(ctx context.Context, username, password string) (string, error) {
+func (s *serv) Login(ctx context.Context, username, password string) (string, error) {
 	accessToken, _, err := s.authClient.Login(ctx, username, password)
 	if err != nil {
 		return "", err

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
 )
@@ -14,7 +15,7 @@ type ChatClient interface {
 	CreateChat(ctx context.Context, chatname string, userIDs []int64) (int64, error)
 	DeleteChat(ctx context.Context, chatID int64) error
 	// Disconnect?
-	// SendMessage() // TODO
+	SendMessage(ctx context.Context, chatname, from, message string) error
 }
 
 type chatClient struct {
@@ -56,6 +57,22 @@ func (c *chatClient) CreateChat(ctx context.Context, chatname string, userIDs []
 func (c *chatClient) DeleteChat(ctx context.Context, chatID int64) error {
 	_, err := c.client.DeleteChat(ctx, &chat_v1.DeleteChatRequest{
 		Id: chatID,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *chatClient) SendMessage(ctx context.Context, chatname, from, message string) error {
+	_, err := c.client.SendMessage(ctx, &chat_v1.SendMessageRequest{
+		Chatname: chatname,
+		Message: &chat_v1.Message{
+			From:      from,
+			Text:      message,
+			CreatedAt: timestamppb.Now(),
+		},
 	})
 	if err != nil {
 		return err

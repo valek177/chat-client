@@ -41,3 +41,12 @@ func (s *serv) CreateChat(ctx context.Context, chatname string, userIDs []int64)
 func (s *serv) DeleteChat(ctx context.Context, chatID int64) error {
 	return s.chatClient.DeleteChat(ctx, chatID)
 }
+
+func (s *serv) SendMessage(ctx context.Context, chatname, from, message string) error {
+	err := s.chatClient.SendMessage(ctx, chatname, from, message)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

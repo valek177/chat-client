@@ -70,3 +70,23 @@ func ConnectChat(ctx context.Context, chatname, username string) (chat_v1.ChatV1
 	}
 	return srv.ConnectChat(ctx, chatname, username)
 }
+
+// func CreateChat(ctx context.Context, chatname, username string) (chat_v1.ChatV1_ConnectChatClient,
+// 	error,
+// ) {
+// 	srv, err := app.serviceProvider.CommandService(ctx)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return srv.CreateChat(ctx, chatname, username)
+// }
+
+// func DeleteChat(ctx context.Context, chatname, username string) (chat_v1.ChatV1_ConnectChatClient,
+// 	error,
+// ) {
+// 	srv, err := app.serviceProvider.CommandService(ctx)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return srv.DeleteChat(ctx, chatname, username)
+// }

@@ -36,6 +36,14 @@ var ConnectChatCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalf("unable to connect to chat with name %s", chatname)
 			}
+			///
+
+			// srv, err := app.ServiceProvider.CommandService(ctx)
+			// if err != nil {
+			// 	return nil, err
+			// }
+			// return srv.ConnectChat(ctx, chatname, username)
+			///
 
 			log.Println("Connected to chat", chatname)
 

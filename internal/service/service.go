@@ -7,7 +7,9 @@ import (
 )
 
 type AuthService interface {
-	GetAccessToken(ctx context.Context, username, password string) (string, error)
+	Login(ctx context.Context, username, password string) (string, error)
+	// CreateUser()
+	// DeleteUser()
 }
 
 type ChatService interface {
@@ -16,6 +18,7 @@ type ChatService interface {
 	)
 	CreateChat(ctx context.Context, chatname string, userIDs []int64) (int64, error)
 	DeleteChat(ctx context.Context, chatID int64) error
+	SendMessage(ctx context.Context, chatname, from, message string) error
 }
 
 type CommandService interface {
