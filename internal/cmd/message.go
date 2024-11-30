@@ -17,9 +17,9 @@ var sendMessageCmd = &cobra.Command{
 	Use:   "send-message",
 	Short: "Send message",
 	Run: func(cmd *cobra.Command, args []string) {
-		chatID, err := cmd.Flags().GetInt64("chat-id")
+		chatname, err := cmd.Flags().GetString("chatname")
 		if err != nil {
-			log.Fatalf("failed to get flag chat-id: %s\n", err.Error())
+			log.Fatalf("failed to get flag chatname: %s\n", err.Error())
 		}
 
 		message, err := cmd.Flags().GetString("message")
@@ -55,7 +55,7 @@ var sendMessageCmd = &cobra.Command{
 		md := metadata.New(map[string]string{"authorization": "Bearer " + accessToken})
 		newCtx := metadata.NewOutgoingContext(cmd.Context(), md)
 
-		err = sendMessage(newCtx, c.C, from, chatID, message)
+		err = sendMessage(newCtx, c.C, from, chatname, message)
 		if err != nil {
 			log.Fatalf("failed to send message: %v", err)
 		}
@@ -64,10 +64,10 @@ var sendMessageCmd = &cobra.Command{
 }
 
 func init() {
-	sendMessageCmd.Flags().Int64P("chat-id", "i", 0, "Chat ID")
-	err := sendMessageCmd.MarkFlagRequired("chat-id")
+	sendMessageCmd.Flags().StringP("chatname", "c", "", "Chat name")
+	err := sendMessageCmd.MarkFlagRequired("chatname")
 	if err != nil {
-		log.Fatalf("failed to mark chat-id flag as required: %s\n", err.Error())
+		log.Fatalf("failed to mark chatname flag as required: %s\n", err.Error())
 	}
 	sendMessageCmd.Flags().StringP("message", "m", "", "Message text")
 	err = sendMessageCmd.MarkFlagRequired("message")
@@ -81,33 +81,9 @@ func init() {
 	}
 }
 
-func sendMessage(ctx context.Context, c chat_v1.ChatV1Client, from string, chatID int64, message string) error {
-	// for {
-	// Ниже пример того, как можно считывать сообщения из консоли
-	// в демонстрационных целях будем засылать в чат рандомный текст раз в 5 секунд
-	//scanner := bufio.NewScanner(os.Stdin)
-	//var lines strings.Builder
-	//
-	//for {
-	//	scanner.Scan()
-	//	line := scanner.Text()
-	//	if len(line) == 0 {
-	//		break
-	//	}
-	//
-	//	lines.WriteString(line)
-	//	lines.WriteString("\n")
-	//}
-	//
-	//err = scanner.Err()
-	//if err != nil {
-	//	log.Println("failed to scan message: ", err)
-	//}
-	// }
-	// text := gofakeit.Word()
-
+func sendMessage(ctx context.Context, c chat_v1.ChatV1Client, from string, chatname string, message string) error {
 	_, err := c.SendMessage(ctx, &chat_v1.SendMessageRequest{
-		ChatId: chatID,
+		Chatname: chatname,
 		Message: &chat_v1.Message{
 			From:      from,
 			Text:      message,
@@ -131,7 +107,7 @@ func login(ctx context.Context, authClient auth_v1.AuthV1Client) (string, error)
 		return "", err
 	}
 
-	log.Println("toke is ", resp.GetAccessToken())
+	log.Println("token is ", resp.GetAccessToken())
 
 	return resp.GetAccessToken(), nil
 }

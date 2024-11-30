@@ -18,15 +18,19 @@ var ConnectChatCmd = &cobra.Command{
 	Use:   "connect",
 	Short: "Connect to chat",
 	Run: func(cmd *cobra.Command, args []string) {
+		// application.commandService.ConnectChat
+		// app.ConnectChat(ctx, chatID)
 		username, err := cmd.Flags().GetString("username")
 		if err != nil {
 			log.Fatalf("failed to get usernames: %s\n", err.Error())
 		}
 
-		chatID, err := cmd.Flags().GetInt64("chat-id")
+		chatname, err := cmd.Flags().GetString("chatname")
 		if err != nil {
 			log.Fatalf("failed to get chat-id: %s\n", err.Error())
 		}
+
+		// execute chatService logic
 
 		c, err := client.NewChatV1Client()
 		if err != nil {
@@ -40,7 +44,7 @@ var ConnectChatCmd = &cobra.Command{
 		go func() {
 			defer wg.Done()
 
-			err = connectChat(cmd.Context(), c.C, chatID, username, 5*time.Second)
+			err = connectChat(cmd.Context(), c.C, chatname, username)
 			if err != nil {
 				log.Fatalf("failed to connect chat: %v", err)
 			}
@@ -57,23 +61,25 @@ func init() {
 		log.Fatalf("failed to mark username flag as required: %s\n", err.Error())
 	}
 
-	ConnectChatCmd.Flags().Int64("chat-id", 0, "Chat ID")
-	err = ConnectChatCmd.MarkFlagRequired("chat-id")
+	ConnectChatCmd.Flags().StringP("chatname", "c", "", "Chat name")
+	err = ConnectChatCmd.MarkFlagRequired("chatname")
 	if err != nil {
-		log.Fatalf("failed to mark chat-id flag as required: %s\n", err.Error())
+		log.Fatalf("failed to mark chatname flag as required: %s\n", err.Error())
 	}
 }
 
-func connectChat(ctx context.Context, c chat_v1.ChatV1Client, chatID int64, username string, period time.Duration) error {
+func connectChat(ctx context.Context, c chat_v1.ChatV1Client, chatname string, username string) error {
+	/// execute chat service connect
 	stream, err := c.ConnectChat(ctx, &chat_v1.ConnectChatRequest{
-		ChatId:   chatID,
+		Chatname: chatname,
 		Username: username,
 	})
 	if err != nil {
 		return err
 	}
+	///
 
-	log.Println("Connected to chat", chatID)
+	log.Println("Connected to chat", chatname)
 
 	for {
 		message, errRecv := stream.Recv()
