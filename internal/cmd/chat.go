@@ -14,6 +14,4 @@ var chatCmd = &cobra.Command{
 func init() {
 	chatCmd.AddCommand(chat.ConnectChatCmd)
 	chatCmd.AddCommand(chat.CreateChatCmd)
-	chatCmd.AddCommand(chat.DeleteChatCmd)
-	chatCmd.AddCommand(chat.DisconnectChatCmd)
 }

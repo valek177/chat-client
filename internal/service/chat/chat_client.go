@@ -9,26 +9,27 @@ import (
 	"github.com/valek177/chat-client/grpc/pkg/chat_v1"
 )
 
-type ChatClient interface {
+// Client is interface for chat client
+type Client interface {
 	ConnectChat(ctx context.Context, chatname, username string) (
 		chat_v1.ChatV1_ConnectChatClient, error)
 	CreateChat(ctx context.Context, chatname string, userIDs []int64) (int64, error)
-	DeleteChat(ctx context.Context, chatID int64) error
-	// Disconnect?
 	SendMessage(ctx context.Context, chatname, from, message string) error
 }
 
-type chatClient struct {
+type client struct {
 	client chat_v1.ChatV1Client
 }
 
-func NewChatClient(conn *grpc.ClientConn) *chatClient {
-	return &chatClient{
+// NewClient creates new chat client
+func NewClient(conn *grpc.ClientConn) *client {
+	return &client{
 		client: chat_v1.NewChatV1Client(conn),
 	}
 }
 
-func (c *chatClient) ConnectChat(ctx context.Context, chatname, username string) (
+// ConnectChat connects user to chat
+func (c *client) ConnectChat(ctx context.Context, chatname, username string) (
 	chat_v1.ChatV1_ConnectChatClient, error,
 ) {
 	resp, err := c.client.ConnectChat(ctx, &chat_v1.ConnectChatRequest{
@@ -42,7 +43,8 @@ func (c *chatClient) ConnectChat(ctx context.Context, chatname, username string)
 	return resp, nil
 }
 
-func (c *chatClient) CreateChat(ctx context.Context, chatname string, userIDs []int64,
+// CreateChat creates new chat
+func (c *client) CreateChat(ctx context.Context, chatname string, userIDs []int64,
 ) (int64, error) {
 	res, err := c.client.CreateChat(ctx, &chat_v1.CreateChatRequest{
 		Name: chatname, UserIds: userIDs,
@@ -54,18 +56,8 @@ func (c *chatClient) CreateChat(ctx context.Context, chatname string, userIDs []
 	return res.GetId(), nil
 }
 
-func (c *chatClient) DeleteChat(ctx context.Context, chatID int64) error {
-	_, err := c.client.DeleteChat(ctx, &chat_v1.DeleteChatRequest{
-		Id: chatID,
-	})
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (c *chatClient) SendMessage(ctx context.Context, chatname, from, message string) error {
+// SendMessage sends message to chat
+func (c *client) SendMessage(ctx context.Context, chatname, from, message string) error {
 	_, err := c.client.SendMessage(ctx, &chat_v1.SendMessageRequest{
 		Chatname: chatname,
 		Message: &chat_v1.Message{

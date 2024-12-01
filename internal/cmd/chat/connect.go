@@ -12,18 +12,29 @@ import (
 	"github.com/valek177/chat-client/internal/app"
 )
 
+// ConnectChatCmd connects user to chat
 var ConnectChatCmd = &cobra.Command{
 	Use:   "connect",
 	Short: "Connect to chat",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
+		ctx := cmd.Context()
+		application, err := app.NewApp(cmd.Context())
+		if err != nil {
+			log.Fatalf("failed to connect to chat: %v", err)
+		}
+		cmdService, err := application.ServiceProvider.CommandService(ctx)
+		if err != nil {
+			log.Fatalf("failed to connect to chat: %v", err)
+		}
+
 		username, err := cmd.Flags().GetString("username")
 		if err != nil {
-			log.Fatalf("failed to get usernames: %s\n", err.Error())
+			log.Fatalf("failed to get username: %s\n", err.Error())
 		}
 
 		chatname, err := cmd.Flags().GetString("chatname")
 		if err != nil {
-			log.Fatalf("failed to get chat-id: %s\n", err.Error())
+			log.Fatalf("failed to get chatname: %s\n", err.Error())
 		}
 
 		wg := sync.WaitGroup{}
@@ -32,18 +43,10 @@ var ConnectChatCmd = &cobra.Command{
 		go func() {
 			defer wg.Done()
 
-			stream, err := app.ConnectChat(cmd.Context(), chatname, username)
+			stream, err := cmdService.ConnectChat(ctx, chatname, username)
 			if err != nil {
 				log.Fatalf("unable to connect to chat with name %s", chatname)
 			}
-			///
-
-			// srv, err := app.ServiceProvider.CommandService(ctx)
-			// if err != nil {
-			// 	return nil, err
-			// }
-			// return srv.ConnectChat(ctx, chatname, username)
-			///
 
 			log.Println("Connected to chat", chatname)
 
@@ -53,7 +56,7 @@ var ConnectChatCmd = &cobra.Command{
 					log.Println("error receive")
 				}
 				if errRecv != nil {
-					log.Println("failed to receive message from stream: ", errRecv)
+					log.Fatal("failed to receive message from stream: ", errRecv)
 				}
 
 				log.Printf("[%v] - [from: %s]: %s\n",
@@ -78,6 +81,6 @@ func init() {
 	ConnectChatCmd.Flags().StringP("chatname", "c", "", "Chat name")
 	err = ConnectChatCmd.MarkFlagRequired("chatname")
 	if err != nil {
-		log.Fatalf("failed to mark chatname flag as required: %s\n", err.Error())
+		log.Fatalf("failed to mark chat name flag as required: %s\n", err.Error())
 	}
 }

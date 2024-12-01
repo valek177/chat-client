@@ -16,15 +16,15 @@ import (
 	"github.com/valek177/platform-common/pkg/closer"
 )
 
-type serviceProvider struct {
+// ServiceProvider is service provider struct
+type ServiceProvider struct {
 	config config.ClientConfig
 
-	authClient auth.AuthClient
-	chatClient chat.ChatClient
+	authClient auth.Client
+	chatClient chat.Client
 
 	authService service.AuthService
 	chatService service.ChatService
-	cmdService  service.CommandService
 
 	authConn *grpc.ClientConn
 	chatConn *grpc.ClientConn
@@ -32,11 +32,13 @@ type serviceProvider struct {
 	commandService *cmd.CommandService
 }
 
-func newServiceProvider() *serviceProvider {
-	return &serviceProvider{}
+// NewServiceProvider returns new service provider
+func NewServiceProvider() *ServiceProvider {
+	return &ServiceProvider{}
 }
 
-func (s *serviceProvider) ClientConfig() (config.ClientConfig, error) {
+// ClientConfig returns client config object
+func (s *ServiceProvider) ClientConfig() (config.ClientConfig, error) {
 	if s.config == nil {
 		cfg, err := env.NewClientConfig()
 		if err != nil {
@@ -49,7 +51,8 @@ func (s *serviceProvider) ClientConfig() (config.ClientConfig, error) {
 	return s.config, nil
 }
 
-func (s *serviceProvider) ChatConn() (*grpc.ClientConn, error) {
+// ChatConn returns chat connection
+func (s *ServiceProvider) ChatConn() (*grpc.ClientConn, error) {
 	if s.chatConn == nil {
 		creds := insecure.NewCredentials()
 
@@ -74,32 +77,34 @@ func (s *serviceProvider) ChatConn() (*grpc.ClientConn, error) {
 	return s.chatConn, nil
 }
 
-func (s *serviceProvider) ChatClient(ctx context.Context) (chat.ChatClient, error) {
+// ChatClient returns chat client
+func (s *ServiceProvider) ChatClient(_ context.Context) (chat.Client, error) {
 	if s.chatClient == nil {
 		chatConn, err := s.ChatConnection()
 		if err != nil {
 			return nil, err
 		}
-		s.chatClient = chat.NewChatClient(chatConn)
+		s.chatClient = chat.NewClient(chatConn)
 	}
 
 	return s.chatClient, nil
 }
 
-func (s *serviceProvider) AuthClient(ctx context.Context) (auth.AuthClient, error) {
+// AuthClient returns auth client
+func (s *ServiceProvider) AuthClient(_ context.Context) (auth.Client, error) {
 	if s.authClient == nil {
 		authConn, err := s.AuthConnection()
 		if err != nil {
 			return nil, err
 		}
-		s.authClient = auth.NewAuthClient(authConn)
+		s.authClient = auth.NewClient(authConn)
 	}
 
 	return s.authClient, nil
 }
 
 // AuthConnection returns AuthConnection
-func (s *serviceProvider) AuthConnection() (*grpc.ClientConn, error) {
+func (s *ServiceProvider) AuthConnection() (*grpc.ClientConn, error) {
 	if s.authConn == nil {
 		var err error
 		cfg, err := s.ClientConfig()
@@ -126,7 +131,8 @@ func (s *serviceProvider) AuthConnection() (*grpc.ClientConn, error) {
 	return s.authConn, nil
 }
 
-func (s *serviceProvider) ChatConnection() (*grpc.ClientConn, error) {
+// ChatConnection returns connection to chat server
+func (s *ServiceProvider) ChatConnection() (*grpc.ClientConn, error) {
 	if s.chatConn == nil {
 		var err error
 		cfg, err := s.ClientConfig()
@@ -149,7 +155,8 @@ func (s *serviceProvider) ChatConnection() (*grpc.ClientConn, error) {
 	return s.chatConn, nil
 }
 
-func (s *serviceProvider) AuthService(ctx context.Context) (service.AuthService, error) {
+// AuthService returns auth service
+func (s *ServiceProvider) AuthService(ctx context.Context) (service.AuthService, error) {
 	if s.authService == nil {
 		authClient, err := s.AuthClient(ctx)
 		if err != nil {
@@ -161,7 +168,8 @@ func (s *serviceProvider) AuthService(ctx context.Context) (service.AuthService,
 	return s.authService, nil
 }
 
-func (s *serviceProvider) ChatService(ctx context.Context) (service.ChatService, error) {
+// ChatService returns chat service
+func (s *ServiceProvider) ChatService(ctx context.Context) (service.ChatService, error) {
 	if s.chatService == nil {
 		chatClient, err := s.ChatClient(ctx)
 		if err != nil {
@@ -173,7 +181,8 @@ func (s *serviceProvider) ChatService(ctx context.Context) (service.ChatService,
 	return s.chatService, nil
 }
 
-func (s *serviceProvider) CommandService(ctx context.Context) (*cmd.CommandService, error) {
+// CommandService returns command service
+func (s *ServiceProvider) CommandService(ctx context.Context) (*cmd.CommandService, error) {
 	if s.commandService == nil {
 		chatService, err := s.ChatService(ctx)
 		if err != nil {

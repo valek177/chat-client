@@ -23,6 +23,6 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(chatCmd)
-	rootCmd.AddCommand(userCmd)
 	rootCmd.AddCommand(sendMessageCmd)
+	rootCmd.AddCommand(loginCmd)
 }

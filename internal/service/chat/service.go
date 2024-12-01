@@ -8,20 +8,21 @@ import (
 )
 
 type serv struct {
-	chatClient ChatClient
+	client Client
 }
 
 // NewService creates new service with settings
-func NewService(chatClient ChatClient) service.ChatService {
+func NewService(chatClient Client) service.ChatService {
 	return &serv{
-		chatClient: chatClient,
+		client: chatClient,
 	}
 }
 
+// ConnectChat connects user to chat
 func (s *serv) ConnectChat(ctx context.Context, chatname, username string) (
 	chat_v1.ChatV1_ConnectChatClient, error,
 ) {
-	stream, err := s.chatClient.ConnectChat(ctx, chatname, username)
+	stream, err := s.client.ConnectChat(ctx, chatname, username)
 	if err != nil {
 		return nil, err
 	}
@@ -29,8 +30,9 @@ func (s *serv) ConnectChat(ctx context.Context, chatname, username string) (
 	return stream, nil
 }
 
+// CreateChat creates chat
 func (s *serv) CreateChat(ctx context.Context, chatname string, userIDs []int64) (int64, error) {
-	id, err := s.chatClient.CreateChat(ctx, chatname, userIDs)
+	id, err := s.client.CreateChat(ctx, chatname, userIDs)
 	if err != nil {
 		return 0, err
 	}
@@ -38,12 +40,9 @@ func (s *serv) CreateChat(ctx context.Context, chatname string, userIDs []int64)
 	return id, nil
 }
 
-func (s *serv) DeleteChat(ctx context.Context, chatID int64) error {
-	return s.chatClient.DeleteChat(ctx, chatID)
-}
-
+// SendMessage sends message
 func (s *serv) SendMessage(ctx context.Context, chatname, from, message string) error {
-	err := s.chatClient.SendMessage(ctx, chatname, from, message)
+	err := s.client.SendMessage(ctx, chatname, from, message)
 	if err != nil {
 		return err
 	}
