@@ -3,6 +3,7 @@ package chat
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"os"
 
 	"google.golang.org/grpc/metadata"
@@ -40,12 +41,13 @@ func TokenCtx(ctx context.Context) (context.Context, error) {
 	if err != nil {
 		return nil, err
 	}
-	accessToken, err := os.ReadFile(homedir + "/" + accessTokenFilename) //nolint:gosec
+	accessToken, err := os.ReadFile(fmt.Sprintf("%s/%s", homedir, accessTokenFilename))
 	if err != nil {
 		return nil, err
 	}
 
-	md := metadata.New(map[string]string{authHeaderName: authPrefix + string(accessToken)})
+	md := metadata.New(map[string]string{authHeaderName: fmt.Sprintf("%s%s", authPrefix,
+		string(accessToken))})
 
 	return metadata.NewOutgoingContext(ctx, md), nil
 }
@@ -55,7 +57,7 @@ func saveTokenToFile(accessToken string) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(dirname + "/" + accessTokenFilename) //nolint:gosec
+	f, err := os.Create(fmt.Sprintf("%s/%s", dirname, accessTokenFilename))
 	if err != nil {
 		return err
 	}
